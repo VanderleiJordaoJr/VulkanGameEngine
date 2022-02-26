@@ -16,6 +16,7 @@ namespace vge
 		struct Vertex
 		{
 			glm::vec2 position;
+			glm::vec3 color;
 
 			static std::vector<VkVertexInputAttributeDescription> GetAttributeDescriptions();
 			static std::vector<VkVertexInputBindingDescription> GetBindingDescriptions();

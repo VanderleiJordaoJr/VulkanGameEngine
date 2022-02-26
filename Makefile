@@ -4,7 +4,7 @@ LDFLAGS = -lglfw -lvulkan -ldl -lpthread -lX11 -lXxf86vm -lXrandr -lXi
 PROJECT = VulkanGameEngine
 DIR = ./bin/
 
-compile: shaders *.cpp 
+compile: shadersCompile *.cpp 
 	$(CPPC) $(CFLAGS) -o $(DIR)$(PROJECT) *.cpp vge/*.cpp $(LDFLAGS)
 
 all: compile test
@@ -15,5 +15,5 @@ test: compile
 clean:
 	rm -f $(DIR)/*
 
-shaders:
+shadersCompile:
 	cd shaders && ./compile.sh

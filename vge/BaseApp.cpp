@@ -96,8 +96,8 @@ namespace vge
 		pipelineConfig.pipelineLayout = pipelineLayout;
 		vgePipeline = std::make_unique<VgePipeline>(
 			vgeDevice,
-			"../shaders/Shader.vert.spv",
-			"../shaders/Shader.frag.spv",
+			"shaders/Shader.vert.spv",
+			"shaders/Shader.frag.spv",
 			pipelineConfig);
 	}
 
@@ -134,7 +134,11 @@ namespace vge
 
 	void BaseApp::LoadModels()
 	{
-		std::vector<VgeModel::Vertex> vertices{{{0.0f, -0.5f}}, {{0.5f, 0.5f}}, {{-0.5f, 0.5f}}};
+		std::vector<VgeModel::Vertex> vertices{
+			{ {0.0f, -0.5f} , {1.0f, 0.0f, 0.0f}}, 
+			{ {0.5f, 0.5f } , {0.0f, 1.0f, 0.0f}}, 
+			{ {-0.5f, 0.5f} , {0.0f, 0.0f, 1.0f}}
+			};
 		vgeModel = std::make_unique<VgeModel>(vgeDevice, vertices);
 	}
 }
