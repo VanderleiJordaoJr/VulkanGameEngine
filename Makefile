@@ -1,11 +1,11 @@
-CPPC= g++
+CPPC= c++
 CFLAGS = -std=c++17 -O2 -g
 LDFLAGS = -lglfw -lvulkan -ldl -lpthread -lX11 -lXxf86vm -lXrandr -lXi
 PROJECT = VulkanGameEngine
 DIR = ./bin/
 
-compile: *.cpp
-	$(CPPC) $(CFLAGS) -o $(DIR)$(PROJECT) *.cpp $(LDFLAGS)
+compile: shaders *.cpp 
+	$(CPPC) $(CFLAGS) -o $(DIR)$(PROJECT) *.cpp vge/*.cpp $(LDFLAGS)
 
 all: compile test
 
@@ -14,3 +14,6 @@ test: compile
 
 clean:
 	rm -f $(DIR)/*
+
+shaders:
+	cd shaders && ./compile.sh

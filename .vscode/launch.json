@@ -8,7 +8,7 @@
 			"name": "Debug",
 			"type": "cppdbg",
 			"request": "launch",
-			"program": "${fileDirname}/bin/VulkanGameEngine",
+			"program": "${workspaceRoot}/bin/VulkanGameEngine",
 			"args": [],
 			"stopAtEntry": false,
 			"cwd": "${fileDirname}",
