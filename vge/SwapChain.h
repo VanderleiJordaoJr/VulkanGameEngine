@@ -41,6 +41,11 @@ namespace vge
 		VkResult acquireNextImage(uint32_t *imageIndex);
 		VkResult submitCommandBuffers(const VkCommandBuffer *buffers, uint32_t *imageIndex);
 
+		bool compareSwapChainFormat(const VgeSwapChain &swapChain) const
+		{
+			return swapChain.swapChainDepthFormat == swapChainDepthFormat && swapChain.swapChainImageFormat == swapChainImageFormat;
+		}
+
 	private:
 		void init();
 		void createSwapChain();
@@ -58,6 +63,7 @@ namespace vge
 		VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR &capabilities);
 
 		VkFormat swapChainImageFormat;
+		VkFormat swapChainDepthFormat;
 		VkExtent2D swapChainExtent;
 
 		std::vector<VkFramebuffer> swapChainFramebuffers;
@@ -74,7 +80,7 @@ namespace vge
 
 		VkSwapchainKHR swapChain;
 		std::shared_ptr<VgeSwapChain> oldSwapChain;
-		
+
 		std::vector<VkSemaphore> imageAvailableSemaphores;
 		std::vector<VkSemaphore> renderFinishedSemaphores;
 		std::vector<VkFence> inFlightFences;

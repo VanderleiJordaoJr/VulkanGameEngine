@@ -2,9 +2,7 @@
 
 #include "Device.h"
 #include "GameObject.h"
-#include "Model.h"
-#include "Pipeline.h"
-#include "SwapChain.h"
+#include "Renderer.h"
 #include "Window.h"
 
 #include <memory>
@@ -26,22 +24,12 @@ namespace vge
 		void Run();
 
 	private:
-		void CreateCommandBuffers();
-		void CreatePipeline();
-		void CreatePipelineLayout();
-		void DrawFrame();
-		void FreeCommandBuffers();
 		void LoadGameObjects();
-		void RecordCommandBuffer(int imageIndex);
-		void RecreateSwapChain();
-		void RenderGameObjects(VkCommandBuffer commandBuffer);
 
 		VgeWindow vgeWindow{WIDTH, HEIGHT, "Hello Vulkan!"};
 		VgeDevice vgeDevice{vgeWindow};
-		std::unique_ptr<VgeSwapChain> vgeSwapChain;
-		std::unique_ptr<VgePipeline> vgePipeline;
-		VkPipelineLayout pipelineLayout;
-		std::vector<VkCommandBuffer> commandBuffers;
+		VgeRenderer vgeRenderer{vgeWindow, vgeDevice};
+
 		std::vector<VgeGameObject> gameObjects;
 	};
 }
