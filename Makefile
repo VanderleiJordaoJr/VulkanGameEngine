@@ -4,14 +4,10 @@ LDFLAGS = -lglfw -lvulkan -ldl -lpthread -lX11 -lXxf86vm -lXrandr -lXi
 PROJECT = VulkanGameEngine
 DIR = ./bin/
 
+default: clean compile
+
 compile: shadersCompile *.cpp 
 	$(CPPC) $(CFLAGS) -o $(DIR)$(PROJECT) *.cpp vge/*.cpp $(LDFLAGS)
-
-all: compile test
-
-test:
-	cd $(DIR)
-	./$(PROJECT)
 
 clean:
 	rm -rf $(DIR)/*

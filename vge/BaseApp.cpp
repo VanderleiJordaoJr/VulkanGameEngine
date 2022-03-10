@@ -3,6 +3,7 @@
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #include <glm/glm.hpp>
+#include <glm/gtc/constants.hpp>
 
 #include <array>
 #include <stdexcept>
@@ -11,13 +12,14 @@ namespace vge
 {
 	struct PushConstantData
 	{
+		glm::mat2 transform{1.f};
 		glm::vec2 offset;
 		alignas(16) glm::vec3 color;
 	};
 
 	BaseApp::BaseApp()
 	{
-		LoadModels();
+		LoadGameObjects();
 		CreatePipelineLayout();
 		RecreateSwapChain();
 		CreateCommandBuffers();
@@ -135,19 +137,25 @@ namespace vge
 		commandBuffers.clear();
 	}
 
-	void BaseApp::LoadModels()
+	void BaseApp::LoadGameObjects()
 	{
 		std::vector<VgeModel::Vertex> vertices{
 			{{0.0f, -0.5f}, {1.0f, 0.0f, 0.0f}},
 			{{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
 			{{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}};
-		vgeModel = std::make_unique<VgeModel>(vgeDevice, vertices);
+		auto vgeModel = std::make_shared<VgeModel>(vgeDevice, vertices);
+
+		auto triangle = VgeGameObject::CreateGameObject();
+		triangle.model = vgeModel;
+		triangle.color = {.1f, .8f, .1f};
+		triangle.transform2d.rotation = .25 * glm::two_pi<float>();
+		triangle.transform2d.scale = {.5f, .5f};
+		triangle.transform2d.translation.x = 0.f;
+		gameObjects.push_back(std::move(triangle));
 	}
 
 	void BaseApp::RecordCommandBuffer(int imageIndex)
 	{
-		static int frame = 0;
-		frame = (frame + 1) % 1000;
 		VkCommandBufferBeginInfo beginInfo{};
 		beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 
@@ -183,25 +191,7 @@ namespace vge
 		vkCmdSetViewport(commandBuffers[imageIndex], 0, 1, &viewport);
 		vkCmdSetScissor(commandBuffers[imageIndex], 0, 1, &scissor);
 
-		vgePipeline->Bind(commandBuffers[imageIndex]);
-		vgeModel->Bind(commandBuffers[imageIndex]);
-
-		for (int j = 0; j < 4; j++)
-		{
-			PushConstantData push{};
-			push.offset = {-0.5f + frame * 0.009f, -0.4f + j * 0.25f};
-			push.color = {0.0f, 0.0f, 0.2f + 0.2f * j};
-
-			vkCmdPushConstants(
-				commandBuffers[imageIndex],
-				pipelineLayout,
-				VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
-				0,
-				sizeof(PushConstantData),
-				&push);
-
-			vgeModel->Draw(commandBuffers[imageIndex]);
-		}
+		RenderGameObjects(commandBuffers[imageIndex]);
 
 		vkCmdEndRenderPass(commandBuffers[imageIndex]);
 		if (vkEndCommandBuffer(commandBuffers[imageIndex]) != VK_SUCCESS)
@@ -235,5 +225,31 @@ namespace vge
 		}
 
 		CreatePipeline();
+	}
+
+	void BaseApp::RenderGameObjects(VkCommandBuffer commandBuffer)
+	{
+		vgePipeline->Bind(commandBuffer);
+
+		for (auto &gameObject : gameObjects)
+		{
+			gameObject.transform2d.rotation =
+				glm::mod(gameObject.transform2d.rotation + 0.01f, glm::two_pi<float>());
+
+			PushConstantData push{};
+			push.offset = gameObject.transform2d.translation;
+			push.color = gameObject.color;
+			push.transform = gameObject.transform2d.Mat2();
+
+			vkCmdPushConstants(
+				commandBuffer,
+				pipelineLayout,
+				VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+				0,
+				sizeof(PushConstantData),
+				&push);
+			gameObject.model->Bind(commandBuffer);
+			gameObject.model->Draw(commandBuffer);
+		}
 	}
 }

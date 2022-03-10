@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Device.h"
+#include "GameObject.h"
 #include "Model.h"
 #include "Pipeline.h"
 #include "SwapChain.h"
@@ -23,15 +24,17 @@ namespace vge
 		BaseApp &operator=(const BaseApp &) = delete;
 
 		void Run();
+
 	private:
 		void CreateCommandBuffers();
 		void CreatePipeline();
 		void CreatePipelineLayout();
 		void DrawFrame();
 		void FreeCommandBuffers();
-		void LoadModels();
+		void LoadGameObjects();
 		void RecordCommandBuffer(int imageIndex);
 		void RecreateSwapChain();
+		void RenderGameObjects(VkCommandBuffer commandBuffer);
 
 		VgeWindow vgeWindow{WIDTH, HEIGHT, "Hello Vulkan!"};
 		VgeDevice vgeDevice{vgeWindow};
@@ -39,6 +42,6 @@ namespace vge
 		std::unique_ptr<VgePipeline> vgePipeline;
 		VkPipelineLayout pipelineLayout;
 		std::vector<VkCommandBuffer> commandBuffers;
-		std::unique_ptr<VgeModel> vgeModel;
+		std::vector<VgeGameObject> gameObjects;
 	};
 }
