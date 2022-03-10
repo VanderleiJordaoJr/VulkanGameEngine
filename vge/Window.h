@@ -17,12 +17,17 @@ namespace vge
 
 		void CreateWindowSurface(VkInstance instance, VkSurfaceKHR *surface);
 		VkExtent2D GetExtent();
+		void ResetResizedFlag();
 		bool ShouldClose();
+		bool WasWindowResized();
+
 	private:
+		static void FrameBufferResizeCallback(GLFWwindow *glfWindow, int width, int height);
 		void InitWindow();
-		
-		const int width;
-		const int height;
+
+		int width;
+		int height;
+		bool frameBufferResized = false;
 		std::string windowTitle;
 		GLFWwindow *glfWindow;
 	};

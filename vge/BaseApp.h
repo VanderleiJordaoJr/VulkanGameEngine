@@ -28,11 +28,14 @@ namespace vge
 		void CreatePipeline();
 		void CreatePipelineLayout();
 		void DrawFrame();
+		void FreeCommandBuffers();
 		void LoadModels();
+		void RecordCommandBuffer(int imageIndex);
+		void RecreateSwapChain();
 
 		VgeWindow vgeWindow{WIDTH, HEIGHT, "Hello Vulkan!"};
 		VgeDevice vgeDevice{vgeWindow};
-		VgeSwapChain vgeSwapChain{vgeDevice, vgeWindow.GetExtent()};
+		std::unique_ptr<VgeSwapChain> vgeSwapChain;
 		std::unique_ptr<VgePipeline> vgePipeline;
 		VkPipelineLayout pipelineLayout;
 		std::vector<VkCommandBuffer> commandBuffers;

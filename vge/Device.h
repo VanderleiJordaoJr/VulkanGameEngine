@@ -37,7 +37,7 @@ namespace vge
 		~VgeDevice();
 
 		VgeDevice(const VgeDevice &) = delete;
-		void operator=(const VgeDevice &) = delete;
+		VgeDevice operator=(const VgeDevice &) = delete;
 		VgeDevice(VgeDevice &&) = delete;
 		VgeDevice &operator=(VgeDevice &&) = delete;
 
