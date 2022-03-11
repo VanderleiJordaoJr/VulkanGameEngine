@@ -70,6 +70,8 @@ namespace vge
 	{
 		vgePipeline->Bind(commandBuffer);
 
+		auto projectionView = camera.GetProjection() * camera.GetView();
+
 		for (auto &gameObject : gameObjects)
 		{
 			gameObject.transform.rotation.y = glm::mod(gameObject.transform.rotation.y + 0.001f, glm::two_pi<float>());
@@ -77,7 +79,7 @@ namespace vge
 
 			PushConstantData push{};
 			push.color = gameObject.color;
-			push.transform = camera.GetProjection() * gameObject.transform.Mat4();
+			push.transform = projectionView * gameObject.transform.Mat4();
 
 			vkCmdPushConstants(
 				commandBuffer,
