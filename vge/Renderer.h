@@ -19,8 +19,9 @@ namespace vge
 		VgeRenderer &operator=(const VgeRenderer &) = delete;
 
 		bool IsFrameInProgress() const;
-		int GetFrameIndex() const;
+		float GetAspectRatio() const;
 		VkCommandBuffer GetCurrentCommandBuffer() const;
+		int GetFrameIndex() const;
 		VkRenderPass GetSwapChainRenderPass() const;
 
 		VkCommandBuffer BeginFrame();

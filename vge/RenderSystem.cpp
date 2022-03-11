@@ -63,7 +63,10 @@ namespace vge
 		}
 	}
 
-	void RenderSystem::RenderGameObjects(VkCommandBuffer commandBuffer, std::vector<VgeGameObject> &gameObjects)
+	void RenderSystem::RenderGameObjects(
+		VkCommandBuffer commandBuffer, 
+		std::vector<VgeGameObject> &gameObjects, 
+		const VgeCamera &camera)
 	{
 		vgePipeline->Bind(commandBuffer);
 
@@ -74,7 +77,7 @@ namespace vge
 
 			PushConstantData push{};
 			push.color = gameObject.color;
-			push.transform = gameObject.transform.Mat4();
+			push.transform = camera.GetProjection() * gameObject.transform.Mat4();
 
 			vkCmdPushConstants(
 				commandBuffer,

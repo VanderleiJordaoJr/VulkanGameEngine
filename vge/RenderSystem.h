@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Camera.h"
 #include "Device.h"
 #include "GameObject.h"
 #include "Pipeline.h"
@@ -17,7 +18,10 @@ namespace vge
 		RenderSystem(const RenderSystem &) = delete;
 		RenderSystem &operator=(const RenderSystem &) = delete;
 
-		void RenderGameObjects(VkCommandBuffer commandBuffer, std::vector<VgeGameObject> &gameObjects);
+		void RenderGameObjects(
+			VkCommandBuffer commandBuffer,
+			std::vector<VgeGameObject> &gameObjects,
+			const VgeCamera &camera);
 
 	private:
 		void CreatePipeline(VkRenderPass renderPass);

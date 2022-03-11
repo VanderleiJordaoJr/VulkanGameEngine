@@ -23,16 +23,21 @@ namespace vge
 		return isFrameStarted;
 	};
 
-	int VgeRenderer::GetFrameIndex() const
+	float VgeRenderer::GetAspectRatio() const
 	{
-		assert(isFrameStarted && "Cannot get currentFrameIndex when frame not in progress");
-		return currentFrameIndex;
+		return vgeSwapChain->extentAspectRatio();
 	};
 
 	VkCommandBuffer VgeRenderer::GetCurrentCommandBuffer() const
 	{
 		assert(isFrameStarted && "Cannot get command buffer when frame not in progress");
 		return commandBuffers[currentFrameIndex];
+	};
+
+	int VgeRenderer::GetFrameIndex() const
+	{
+		assert(isFrameStarted && "Cannot get currentFrameIndex when frame not in progress");
+		return currentFrameIndex;
 	};
 
 	VkRenderPass VgeRenderer::GetSwapChainRenderPass() const

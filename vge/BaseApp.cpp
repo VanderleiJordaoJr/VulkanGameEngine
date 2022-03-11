@@ -1,5 +1,6 @@
 #include "BaseApp.h"
 
+#include "Camera.h"
 #include "RenderSystem.h"
 
 #define GLM_FORCE_RADIANS
@@ -24,16 +25,27 @@ namespace vge
 	void BaseApp::Run()
 	{
 		RenderSystem renderSystem{vgeDevice, vgeRenderer.GetSwapChainRenderPass()};
+		VgeCamera camera{};
 
 		while (!vgeWindow.ShouldClose())
 		{
 			glfwPollEvents();
 
+			float aspectRatio = vgeRenderer.GetAspectRatio();
+
+			// camera.SetOrthographicProjection(-aspectRatio, aspectRatio, -1, 1, -1, 1);
+
+			camera.SetPerspectiveProjection(
+				glm::radians(50.0f),
+				aspectRatio,
+				0.1f, 10.0f
+			);
+
 			if (auto commandBuffer = vgeRenderer.BeginFrame())
 			{
 				vgeRenderer.BeginSwapChainRenderPass(commandBuffer);
 
-				renderSystem.RenderGameObjects(commandBuffer, gameObjects);
+				renderSystem.RenderGameObjects(commandBuffer, gameObjects, camera);
 
 				vgeRenderer.EndSwapChainRenderPass(commandBuffer);
 				vgeRenderer.EndFrame();
@@ -105,12 +117,12 @@ namespace vge
 
 	void BaseApp::LoadGameObjects()
 	{
-		std::shared_ptr<VgeModel> vgeModel = CreateCubeModel(vgeDevice, {.0f,.0f,.0f});
+		std::shared_ptr<VgeModel> vgeModel = CreateCubeModel(vgeDevice, {.0f, .0f, .0f});
 		auto cube = VgeGameObject::CreateGameObject();
 		cube.model = vgeModel;
 
-		cube.transform.translation = {.0f,.0f,.5f};
-		cube.transform.scale = {.5f,.5f,.5f};
+		cube.transform.translation = {.0f, .0f, 2.5f};
+		cube.transform.scale = {.5f, .5f, .5f};
 
 		gameObjects.push_back(std::move(cube));
 	}
