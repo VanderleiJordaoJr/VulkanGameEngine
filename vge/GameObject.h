@@ -6,13 +6,13 @@
 
 namespace vge
 {
-	struct Transform2DComponent
+	struct TransformComponent
 	{
-		glm::vec2 translation{};
-		glm::vec2 scale{1.f, 1.f};
-		float rotation;
+		glm::vec3 translation{};
+		glm::vec3 scale{1.f, 1.f, 1.f};
+		glm::vec3 rotation;
 		
-		glm::mat2 Mat2();
+		glm::mat4 Mat4();
 	};
 
 	class VgeGameObject
@@ -31,7 +31,7 @@ namespace vge
 
 		std::shared_ptr<VgeModel> model{};
 		glm::vec3 color{};
-		Transform2DComponent transform2d{};
+		TransformComponent transform{};
 
 	private:
 		VgeGameObject(id_t objId) : id{objId} {};

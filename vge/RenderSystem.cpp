@@ -12,8 +12,7 @@ namespace vge
 {
 	struct PushConstantData
 	{
-		glm::mat2 transform{1.f};
-		glm::vec2 offset;
+		glm::mat4 transform{1.f};
 		alignas(16) glm::vec3 color;
 	};
 
@@ -70,13 +69,12 @@ namespace vge
 
 		for (auto &gameObject : gameObjects)
 		{
-			gameObject.transform2d.rotation =
-				glm::mod(gameObject.transform2d.rotation + 0.01f, glm::two_pi<float>());
+			gameObject.transform.rotation.y = glm::mod(gameObject.transform.rotation.y + 0.001f, glm::two_pi<float>());
+			gameObject.transform.rotation.x = glm::mod(gameObject.transform.rotation.y + 0.001f, glm::two_pi<float>());
 
 			PushConstantData push{};
-			push.offset = gameObject.transform2d.translation;
 			push.color = gameObject.color;
-			push.transform = gameObject.transform2d.Mat2();
+			push.transform = gameObject.transform.Mat4();
 
 			vkCmdPushConstants(
 				commandBuffer,
