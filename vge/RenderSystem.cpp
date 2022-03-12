@@ -74,9 +74,6 @@ namespace vge
 
 		for (auto &gameObject : gameObjects)
 		{
-			gameObject.transform.rotation.y = glm::mod(gameObject.transform.rotation.y + 0.001f, glm::two_pi<float>());
-			gameObject.transform.rotation.x = glm::mod(gameObject.transform.rotation.y + 0.001f, glm::two_pi<float>());
-
 			PushConstantData push{};
 			push.color = gameObject.color;
 			push.transform = projectionView * gameObject.transform.Mat4();

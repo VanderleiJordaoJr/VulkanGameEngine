@@ -13,13 +13,13 @@ namespace vge
 
 	VgeWindow::~VgeWindow()
 	{
-		glfwDestroyWindow(glfWindow);
+		glfwDestroyWindow(glfwWindow);
 		glfwTerminate();
 	}
 
 	void VgeWindow::CreateWindowSurface(VkInstance instance, VkSurfaceKHR *surface)
 	{
-		if (glfwCreateWindowSurface(instance, glfWindow, nullptr, surface) != VK_SUCCESS)
+		if (glfwCreateWindowSurface(instance, glfwWindow, nullptr, surface) != VK_SUCCESS)
 			throw std::runtime_error("failed to create window surface");
 	}
 
@@ -35,7 +35,7 @@ namespace vge
 
 	bool VgeWindow::ShouldClose()
 	{
-		return glfwWindowShouldClose(glfWindow);
+		return glfwWindowShouldClose(glfwWindow);
 	}
 
 	bool VgeWindow::WasWindowResized()
@@ -43,9 +43,14 @@ namespace vge
 		return frameBufferResized;
 	}
 
-	void VgeWindow::FrameBufferResizeCallback(GLFWwindow *glfWindow, int width, int height)
+	GLFWwindow* VgeWindow::GetGLFWWindow()
 	{
-		auto vgeWindow = reinterpret_cast<VgeWindow *>(glfwGetWindowUserPointer(glfWindow));
+		return glfwWindow;
+	}
+
+	void VgeWindow::FrameBufferResizeCallback(GLFWwindow *glfwWindow, int width, int height)
+	{
+		auto vgeWindow = reinterpret_cast<VgeWindow *>(glfwGetWindowUserPointer(glfwWindow));
 		vgeWindow->frameBufferResized = true;
 		vgeWindow->width = width;
 		vgeWindow->height = height;
@@ -60,9 +65,9 @@ namespace vge
 		glfwSetErrorCallback([](int error, const char *description)
 							 { fputs(description, stderr); });
 
-		glfWindow = glfwCreateWindow(width, height, windowTitle.c_str(), nullptr, nullptr);
+		glfwWindow = glfwCreateWindow(width, height, windowTitle.c_str(), nullptr, nullptr);
 		
-		glfwSetWindowUserPointer(glfWindow, this);
-		glfwSetFramebufferSizeCallback(glfWindow, FrameBufferResizeCallback);
+		glfwSetWindowUserPointer(glfwWindow, this);
+		glfwSetFramebufferSizeCallback(glfwWindow, FrameBufferResizeCallback);
 	}
 }
