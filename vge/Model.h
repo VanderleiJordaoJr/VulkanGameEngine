@@ -22,7 +22,13 @@ namespace vge
 			static std::vector<VkVertexInputBindingDescription> GetBindingDescriptions();
 		};
 
-		VgeModel(VgeDevice &device, const std::vector<Vertex> &vertices);
+		struct Builder
+		{
+			std::vector<Vertex> vertices{};
+			std::vector<uint32_t> indices{};
+		};
+
+		VgeModel(VgeDevice &device, const VgeModel::Builder &builder);
 		~VgeModel();
 		VgeModel(const VgeModel &) = delete;
 		VgeModel &operator=(const VgeModel &) = delete;
@@ -32,10 +38,18 @@ namespace vge
 
 	private:
 		void CreateVertexBuffers(const std::vector<Vertex> &vertices);
+		void CreateIndexBuffers(const std::vector<uint32_t> &indices);
 
 		VgeDevice &vgeDevice;
+
+		bool hasIndexBuffer = false;
+
 		VkBuffer vertexBuffer;
 		VkDeviceMemory vertexBufferMemory;
 		uint32_t vertexCount;
+
+		VkBuffer indexBuffer;
+		VkDeviceMemory indexBufferMemory;
+		uint32_t indexCount;
 	};
 }

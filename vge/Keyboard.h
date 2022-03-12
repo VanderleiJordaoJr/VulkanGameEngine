@@ -20,6 +20,8 @@ namespace vge
 			int lookRight = GLFW_KEY_RIGHT;
 			int lookUp = GLFW_KEY_UP;
 			int lookDown = GLFW_KEY_DOWN;
+			
+			int quit = GLFW_KEY_Q;
 		};
 
 		void MoveInPlaneXZ(GLFWwindow* window, float deltaTime, VgeGameObject &gameObject);
