@@ -1,6 +1,6 @@
-CPPC= g++
-CFLAGS = -std=c++17 -O2 -g
-LDFLAGS = -lglfw -lvulkan -ldl -lpthread -lX11 -lXxf86vm -lXrandr -lXi
+CPPC= clang++
+CFLAGS = -std=c++17 -O2 -g -I /home/vanderlei/.local/libs
+LDFLAGS = -lglfw -lvulkan -ldl -lpthread -lX11 -lXxf86vm -lXrandr -lXi 
 PROJECT = VulkanGameEngine
 DIR = ./bin/
 
